@@ -2,6 +2,7 @@ require('dotenv').config();
 const secretKey = process.env.APP_SECRET_KEY;
 console.log(secretKey);
 const express = require('express');
+console.log("test";
 const app = express();
 
 app.get('/', (req, res) => {
