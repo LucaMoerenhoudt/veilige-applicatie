@@ -1,0 +1,34 @@
+name: Security Scan & Test
+
+on: [push, pull_request]
+
+jobs:
+  security:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Installeer Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20' # Pas aan naar jouw Node.js-versie
+
+    - name: Installeer npm dependencies
+      run: npm install
+      working-directory: ./app
+        
+    - name: Install dependencies
+      run: pip install flask bandit
+
+    - name: Run Bandit (Static Code Analysis)
+      run: bandit -r ./app
+
+    - name: Scan repository for vulnerabilities
+      uses: aquasecurity/trivy-action@master
+      with:
+        scan-type: 'fs'
+        severity: 'HIGH,CRITICAL'
+        exit-code: '1'
+      
